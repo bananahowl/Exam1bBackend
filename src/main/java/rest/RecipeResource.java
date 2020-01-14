@@ -19,7 +19,7 @@ import javax.ws.rs.core.MediaType;
 //Todo Remove or change relevant parts before ACTUAL use
 @Path("recipes")
 public class RecipeResource {
-    private static String urlRecipe = "http://46.101.217.16:4000";
+    private static String urlRecipe = "http://46.101.217.16:4000/";
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(
                 "pu",
                 "jdbc:mysql://localhost:3307/startcode",
@@ -37,7 +37,7 @@ public class RecipeResource {
     
     @Path("recipe/{name}")
     public static String getRecipeLetter(@PathParam("name") String name) throws MalformedURLException, IOException {
-        URL url = new URL(urlRecipe + name);
+        URL url = new URL("http://46.101.217.16:4000/recipe/" + name);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json;charset=UTF-8");

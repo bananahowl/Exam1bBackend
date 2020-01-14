@@ -54,7 +54,7 @@ public class UserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("user/setup")
-    public String setupData() {
+    public static void setupData() {
 
         EntityManager em = EMF.createEntityManager();
 
@@ -76,7 +76,7 @@ public class UserResource {
             em.persist(both);
             em.getTransaction().commit();
             List<User> users = em.createQuery("select user from User user").getResultList();
-            return "[ created: " + users.size() + " users.]";
+            
         } finally {
             em.close();
         }

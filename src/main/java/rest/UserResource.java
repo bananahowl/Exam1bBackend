@@ -7,10 +7,12 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
@@ -51,14 +53,15 @@ public class UserResource {
         }
     }
 
-    @GET
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("user/setup")
-    public static void setupData() {
+    @Path("setup")
+    public void setupData() {
 
         EntityManager em = EMF.createEntityManager();
 
-        try {
+        
             User user = new User("user1", "1235");
             User admin = new User("admin1", "1235");
             User both = new User("user_admin1", "1235");
@@ -77,9 +80,7 @@ public class UserResource {
             em.getTransaction().commit();
             List<User> users = em.createQuery("select user from User user").getResultList();
             
-        } finally {
-            em.close();
-        }
+        
     }
 
     @GET

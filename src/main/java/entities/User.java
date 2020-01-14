@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,6 +36,9 @@ public class User implements Serializable {
     @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
   @ManyToMany
   private List<Role> roleList = new ArrayList();
+  
+//  @ManyToOne
+//  private List<DayPlan> menuPlan = new ArrayList();
 
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {
@@ -51,13 +55,13 @@ public class User implements Serializable {
 
   //TODO Change when password is hashed
    public boolean verifyPassword(String pw){
-        return(pw.equals(userPass));
+        return(BCrypt.checkpw(pw, userPass));
     }
 
   public User(String userName, String userPass) {
     this.userName = userName;
 
-    this.userPass = userPass;
+    this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
   }
 
 

@@ -1,6 +1,7 @@
 package rest;
 
 import com.google.gson.Gson;
+import entities.Role;
 import entities.User;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
@@ -19,7 +20,7 @@ import utils.EMF_Creator;
  * @author lam@cphbusiness.dk
  */
 @Path("info")
-public class DemoResource {
+public class UserResource {
 
     private static EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory(EMF_Creator.DbSelector.DEV, EMF_Creator.Strategy.CREATE);
 
@@ -45,6 +46,37 @@ public class DemoResource {
         try {
             List<User> users = em.createQuery("select user from User user").getResultList();
             return "[" + users.size() + "]";
+        } finally {
+            em.close();
+        }
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("user/setup")
+    public String setupData() {
+
+        EntityManager em = EMF.createEntityManager();
+
+        try {
+            User user = new User("user1", "1235");
+            User admin = new User("admin1", "1235");
+            User both = new User("user_admin1", "1235");
+            em.getTransaction().begin();
+            Role userRole = new Role("user");
+            Role adminRole = new Role("admin");
+            user.addRole(userRole);
+            admin.addRole(adminRole);
+            both.addRole(userRole);
+            both.addRole(adminRole);
+            em.persist(userRole);
+            em.persist(adminRole);
+            em.persist(user);
+            em.persist(admin);
+            em.persist(both);
+            em.getTransaction().commit();
+            List<User> users = em.createQuery("select user from User user").getResultList();
+            return "[ created: " + users.size() + " users.]";
         } finally {
             em.close();
         }

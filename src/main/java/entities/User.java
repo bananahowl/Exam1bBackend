@@ -37,8 +37,9 @@ public class User implements Serializable {
   @ManyToMany
   private List<Role> roleList = new ArrayList();
   
-//  @ManyToOne
-//  private List<DayPlan> menuPlan = new ArrayList();
+// @ManyToOne
+// @ElementCollection
+// private List<DayPlan> menuPlan = new ArrayList();
 
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {

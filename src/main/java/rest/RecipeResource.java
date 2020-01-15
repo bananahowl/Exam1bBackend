@@ -32,12 +32,34 @@ public class RecipeResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String demo() {
-        return "{\"msg\":\"Hello this the recipe REST POINT\"}";
+        return "{\"msg\":\"Hel\"}";
     }
     
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("recipe/{name}")
     public static String getRecipeLetter(@PathParam("name") String name) throws MalformedURLException, IOException {
         URL url = new URL("http://46.101.217.16:4000/recipe/" + name);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("Accept", "application/json;charset=UTF-8");
+        con.setRequestProperty("User-Agent", "server"); //remember if you are using SWAPI
+        Scanner scan = new Scanner(con.getInputStream());
+        String jsonStr = null;
+        if (scan.hasNext()) {
+            jsonStr = scan.nextLine();
+            //jsonStr += "\n";
+        }
+        scan.close();
+        return jsonStr;
+
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("test")
+    public static String getRecipeTest() throws MalformedURLException, IOException {
+        URL url = new URL("http://46.101.217.16:4000/recipe/slow%20cooker%20beef%20stew" );
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Accept", "application/json;charset=UTF-8");
